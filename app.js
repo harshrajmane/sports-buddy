@@ -1,5 +1,3 @@
-//final fixing
-
 import { auth, db } from "./firebase.js";
 
 import {
@@ -43,8 +41,8 @@ window.register = function() {
     createUserWithEmailAndPassword(auth, email, password)
         .then(() => {
             console.log("User registered:", email);
-            alert("Registration successful!");
-            window.location.href = "index.html"; // ✅ FIXED
+            alert("Registration successful! Please login.");
+            // ❌ NO REDIRECT HERE (FIXED)
         })
         .catch(error => alert(error.message));
 }
@@ -54,7 +52,7 @@ window.register = function() {
 window.logout = function(){
     signOut(auth).then(() => {
         console.log("User logged out");
-        window.location.href = "index.html"; // ✅ FIXED
+        window.location.href = "index.html"; // ✅ SAFE REDIRECT
     });
 }
 
@@ -62,7 +60,7 @@ window.logout = function(){
 // ================= AUTH PROTECTION =================
 onAuthStateChanged(auth, user => {
     if(!user && document.getElementById("eventsList")){
-        window.location.href = "index.html"; // ✅ FIXED
+        window.location.href = "index.html"; // ✅ SAFE REDIRECT
     }
 });
 
