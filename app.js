@@ -41,8 +41,8 @@ window.register = function() {
     createUserWithEmailAndPassword(auth, email, password)
         .then(() => {
             console.log("User registered:", email);
-            alert("Registration successful! Please login.");
-            // ❌ NO REDIRECT HERE (FIXED)
+            alert("Registration successful!");
+            window.location.href = "index.html"; // ✅ correct redirect
         })
         .catch(error => alert(error.message));
 }
@@ -52,15 +52,18 @@ window.register = function() {
 window.logout = function(){
     signOut(auth).then(() => {
         console.log("User logged out");
-        window.location.href = "index.html"; // ✅ SAFE REDIRECT
+        window.location.href = "index.html"; // ✅ correct redirect
     });
 }
 
 
 // ================= AUTH PROTECTION =================
 onAuthStateChanged(auth, user => {
-    if(!user && document.getElementById("eventsList")){
-        window.location.href = "index.html"; // ✅ SAFE REDIRECT
+
+    const isDashboard = window.location.pathname.includes("dashboard");
+
+    if(!user && isDashboard){
+        window.location.href = "index.html"; // protect dashboard
     }
 });
 
@@ -103,7 +106,6 @@ async function loadEvents(){
                 return;
             }
 
-            // Prevent duplicate join
             const existing = await getDocs(collection(db, "joins"));
 
             let alreadyJoined = false;
