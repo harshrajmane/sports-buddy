@@ -18,13 +18,11 @@ import {
 
 // ================= LOGIN =================
 window.login = function() {
-
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
     signInWithEmailAndPassword(auth, email, password)
         .then(() => {
-            console.log("User logged in:", email);
             alert("Login successful!");
             window.location.href = "dashboard.html";
         })
@@ -34,15 +32,13 @@ window.login = function() {
 
 // ================= REGISTER =================
 window.register = function() {
-
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
     createUserWithEmailAndPassword(auth, email, password)
         .then(() => {
-            console.log("User registered:", email);
             alert("Registration successful!");
-            window.location.href = "index.html"; // ✅ correct redirect
+            window.location.href = "index.html";   // ✅ correct
         })
         .catch(error => alert(error.message));
 }
@@ -51,19 +47,15 @@ window.register = function() {
 // ================= LOGOUT =================
 window.logout = function(){
     signOut(auth).then(() => {
-        console.log("User logged out");
-        window.location.href = "index.html"; // ✅ correct redirect
+        window.location.href = "index.html";   // ✅ correct
     });
 }
 
 
 // ================= AUTH PROTECTION =================
 onAuthStateChanged(auth, user => {
-
-    const isDashboard = window.location.pathname.includes("dashboard");
-
-    if(!user && isDashboard){
-        window.location.href = "index.html"; // protect dashboard
+    if (!user && window.location.pathname.includes("dashboard.html")) {
+        window.location.href = "index.html";   // ✅ correct
     }
 });
 
@@ -94,7 +86,6 @@ async function loadEvents(){
             <button class="deleteBtn">Delete Event</button>
         `;
 
-        // ================= JOIN EVENT =================
         const joinBtn = div.querySelector(".joinBtn");
 
         joinBtn.addEventListener("click", async () => {
@@ -127,8 +118,6 @@ async function loadEvents(){
                 userId: user.uid
             });
 
-            console.log("User joined event:", documentItem.id);
-
             joinBtn.textContent = "Joined ✓";
             joinBtn.disabled = true;
 
@@ -136,7 +125,6 @@ async function loadEvents(){
         });
 
 
-        // ================= DELETE EVENT =================
         const deleteBtn = div.querySelector(".deleteBtn");
 
         deleteBtn.addEventListener("click", async () => {
@@ -144,9 +132,6 @@ async function loadEvents(){
             if(confirm("Are you sure you want to delete this event?")){
 
                 await deleteDoc(doc(db, "events", documentItem.id));
-
-                console.log("Event deleted:", documentItem.id);
-
                 loadEvents();
             }
         });
@@ -156,7 +141,7 @@ async function loadEvents(){
 }
 
 
-// ================= RUN ON DASHBOARD =================
+// ================= RUN =================
 document.addEventListener("DOMContentLoaded", () => {
     if(document.getElementById("eventsList")){
         loadEvents();
