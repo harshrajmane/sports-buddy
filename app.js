@@ -42,7 +42,7 @@ window.register = function() {
         .then(() => {
             console.log("User registered:", email);
             alert("Registration successful!");
-            window.location.href = "login.html";
+            window.location.href = "/";   // ✅ FIXED
         })
         .catch(error => alert(error.message));
 }
@@ -52,7 +52,7 @@ window.register = function() {
 window.logout = function(){
     signOut(auth).then(() => {
         console.log("User logged out");
-        window.location.href = "login.html";
+        window.location.href = "/";   // ✅ FIXED
     });
 }
 
@@ -60,7 +60,7 @@ window.logout = function(){
 // ================= AUTH PROTECTION =================
 onAuthStateChanged(auth, user => {
     if(!user && document.getElementById("eventsList")){
-        window.location.href = "login.html";
+        window.location.href = "/";   // ✅ FIXED
     }
 });
 
