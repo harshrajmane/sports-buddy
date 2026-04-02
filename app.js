@@ -38,7 +38,7 @@ window.register = function() {
     createUserWithEmailAndPassword(auth, email, password)
         .then(() => {
             alert("Registration successful!");
-            window.location.href = "index.html";   // ✅ correct
+            window.location.href = "index.html"; // back to login
         })
         .catch(error => alert(error.message));
 }
@@ -47,15 +47,26 @@ window.register = function() {
 // ================= LOGOUT =================
 window.logout = function(){
     signOut(auth).then(() => {
-        window.location.href = "index.html";   // ✅ correct
+        window.location.href = "index.html";
     });
 }
 
 
-// ================= AUTH PROTECTION =================
+// ================= AUTH STATE HANDLER =================
 onAuthStateChanged(auth, user => {
-    if (!user && window.location.pathname.includes("dashboard.html")) {
-        window.location.href = "index.html";   // ✅ correct
+
+    const path = window.location.pathname;
+
+    if(user){
+        // If logged in → don't stay on login/register
+        if(path.includes("index.html") || path.includes("register.html") || path === "/"){
+            window.location.href = "dashboard.html";
+        }
+    } else {
+        // If not logged in → block dashboard
+        if(path.includes("dashboard.html")){
+            window.location.href = "index.html";
+        }
     }
 });
 
@@ -86,6 +97,7 @@ async function loadEvents(){
             <button class="deleteBtn">Delete Event</button>
         `;
 
+        // JOIN
         const joinBtn = div.querySelector(".joinBtn");
 
         joinBtn.addEventListener("click", async () => {
@@ -124,7 +136,7 @@ async function loadEvents(){
             alert("Joined successfully!");
         });
 
-
+        // DELETE
         const deleteBtn = div.querySelector(".deleteBtn");
 
         deleteBtn.addEventListener("click", async () => {
