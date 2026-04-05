@@ -17,9 +17,14 @@ import {
 
 
 // ================= LOGIN =================
-window.login = function() {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+function login() {
+    const email = document.getElementById("email")?.value;
+    const password = document.getElementById("password")?.value;
+
+    if(!email || !password){
+        alert("Enter email and password");
+        return;
+    }
 
     signInWithEmailAndPassword(auth, email, password)
         .then(() => {
@@ -29,41 +34,50 @@ window.login = function() {
         .catch(error => alert(error.message));
 }
 
+window.login = login;
+
 
 // ================= REGISTER =================
-window.register = function() {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+function register() {
+    const email = document.getElementById("email")?.value;
+    const password = document.getElementById("password")?.value;
+
+    if(!email || !password){
+        alert("Enter email and password");
+        return;
+    }
 
     createUserWithEmailAndPassword(auth, email, password)
         .then(() => {
             alert("Registration successful!");
-            window.location.href = "index.html"; // back to login
+            window.location.href = "index.html";
         })
         .catch(error => alert(error.message));
 }
 
+window.register = register;
+
 
 // ================= LOGOUT =================
-window.logout = function(){
+function logout(){
     signOut(auth).then(() => {
         window.location.href = "index.html";
     });
 }
 
+window.logout = logout;
 
-// ================= AUTH STATE HANDLER =================
+
+// ================= AUTH STATE =================
 onAuthStateChanged(auth, user => {
 
     const path = window.location.pathname;
 
     if(user){
-        // If logged in → don't stay on login/register
         if(path.includes("index.html") || path.includes("register.html") || path === "/"){
             window.location.href = "dashboard.html";
         }
     } else {
-        // If not logged in → block dashboard
         if(path.includes("dashboard.html")){
             window.location.href = "index.html";
         }
@@ -142,7 +156,6 @@ async function loadEvents(){
         deleteBtn.addEventListener("click", async () => {
 
             if(confirm("Are you sure you want to delete this event?")){
-
                 await deleteDoc(doc(db, "events", documentItem.id));
                 loadEvents();
             }
